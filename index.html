@@ -15,7 +15,6 @@
     --text: #e8e8e0;
     --muted: #666;
     --accent: #c8f060;
-    --accent-dim: #8aaa30;
     --tile: 120px;
     --gap: 3px;
   }
@@ -33,7 +32,7 @@
     border-bottom: 1px solid var(--border);
     padding: 20px 28px;
     display: flex;
-    align-items: baseline;
+    align-items: center;
     gap: 16px;
     position: sticky;
     top: 0;
@@ -50,15 +49,32 @@
     color: var(--accent);
   }
 
-  header span {
+  #count-label {
     font-family: 'IBM Plex Mono', monospace;
     font-size: 11px;
     color: var(--muted);
     letter-spacing: 0.06em;
   }
 
-  #add-btn {
+  #auth-btn {
     margin-left: auto;
+    background: transparent;
+    color: var(--muted);
+    border: 1px solid var(--border-bright);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  #auth-btn:hover { color: var(--text); border-color: var(--text); }
+
+  #add-btn {
+    display: none;
     background: var(--accent);
     color: #0d0d0d;
     border: none;
@@ -69,11 +85,10 @@
     text-transform: uppercase;
     padding: 8px 16px;
     cursor: pointer;
-    transition: background 0.15s, transform 0.1s;
+    transition: background 0.15s;
   }
 
   #add-btn:hover { background: #d9ff6e; }
-  #add-btn:active { transform: scale(0.97); }
 
   #grid {
     display: grid;
@@ -108,10 +123,8 @@
 
   .tile-label {
     position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: rgba(13,13,13,0.9);
+    bottom: 0; left: 0; right: 0;
+    background: rgba(13,13,13,0.92);
     padding: 5px 6px;
     font-family: 'IBM Plex Mono', monospace;
     font-size: 9px;
@@ -139,13 +152,18 @@
     transition: border-color 0.15s, background 0.15s;
   }
 
-  .tile-add:hover {
-    border-color: var(--accent);
-    background: rgba(200,240,96,0.04);
-  }
-
+  .tile-add:hover { border-color: var(--accent); background: rgba(200,240,96,0.04); }
   .tile-add svg { opacity: 0.3; transition: opacity 0.15s; }
   .tile-add:hover svg { opacity: 1; }
+
+  .empty-state {
+    grid-column: 1 / -1;
+    padding: 60px 28px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+  }
 
   /* Modal */
   #overlay {
@@ -157,7 +175,6 @@
     align-items: center;
     justify-content: center;
   }
-
   #overlay.open { display: flex; }
 
   #modal {
@@ -196,7 +213,7 @@
     margin-bottom: 6px;
   }
 
-  .field input {
+  .field input[type=text] {
     width: 100%;
     background: var(--bg);
     border: 1px solid var(--border-bright);
@@ -208,8 +225,8 @@
     transition: border-color 0.15s;
   }
 
-  .field input:focus { border-color: var(--accent); }
-  .field input::placeholder { color: var(--muted); }
+  .field input[type=text]:focus { border-color: var(--accent); }
+  .field input[type=text]::placeholder { color: var(--muted); }
 
   #drop-zone {
     border: 1px dashed var(--border-bright);
@@ -257,27 +274,20 @@
     overflow: hidden;
   }
 
-  #preview-wrap img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-  }
+  #preview-wrap img { width: 100%; height: 100%; object-fit: contain; }
 
   #preview-clear {
     position: absolute;
-    top: 6px;
-    right: 6px;
+    top: 6px; right: 6px;
     background: rgba(13,13,13,0.85);
     border: 1px solid var(--border-bright);
     color: var(--muted);
     font-size: 14px;
-    width: 24px;
-    height: 24px;
+    width: 24px; height: 24px;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: color 0.15s;
   }
 
   #preview-clear:hover { color: var(--text); }
@@ -301,30 +311,22 @@
     transition: background 0.15s, color 0.15s;
   }
 
-  #btn-cancel {
-    background: transparent;
-    color: var(--muted);
-  }
-
+  #btn-cancel { background: transparent; color: var(--muted); }
   #btn-cancel:hover { background: var(--border); color: var(--text); }
-
-  #btn-save {
-    background: var(--accent);
-    color: #0d0d0d;
-    border-color: var(--accent);
-  }
-
+  #btn-save { background: var(--accent); color: #0d0d0d; border-color: var(--accent); }
   #btn-save:hover { background: #d9ff6e; }
-
-  #btn-delete {
-    background: transparent;
-    color: #e05555;
-    border-color: #3a2020;
-    flex: 0;
-    padding: 10px 14px;
-  }
-
+  #btn-delete { background: transparent; color: #e05555; border-color: #3a2020; flex: 0; padding: 10px 14px; }
   #btn-delete:hover { background: #3a2020; }
+
+  #status-msg {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    margin-top: 12px;
+    letter-spacing: 0.06em;
+    min-height: 16px;
+    text-align: center;
+  }
 
   /* Lightbox */
   #lightbox {
@@ -349,9 +351,7 @@
     border: 1px solid var(--border-bright);
   }
 
-  #lightbox-info {
-    text-align: center;
-  }
+  #lightbox-info { text-align: center; }
 
   #lightbox-info p {
     font-family: 'IBM Plex Mono', monospace;
@@ -364,7 +364,6 @@
     font-family: 'IBM Plex Mono', monospace;
     font-size: 11px;
     color: var(--muted);
-    letter-spacing: 0.05em;
     text-decoration: none;
   }
 
@@ -372,8 +371,7 @@
 
   #lightbox-close {
     position: fixed;
-    top: 20px;
-    right: 24px;
+    top: 20px; right: 24px;
     font-family: 'IBM Plex Mono', monospace;
     font-size: 11px;
     letter-spacing: 0.1em;
@@ -387,14 +385,70 @@
 
   #lightbox-close:hover { color: var(--text); }
 
-  .empty-state {
-    grid-column: 1 / -1;
-    padding: 60px 28px;
+  /* Register panel */
+  #register-panel {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.82);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #register-panel.open { display: flex; }
+
+  #register-box {
+    background: var(--surface);
+    border: 1px solid var(--border-bright);
+    width: 360px;
+    max-width: 95vw;
+    padding: 28px;
+    animation: slideUp 0.2s ease;
+  }
+
+  #register-box h2 {
     font-family: 'IBM Plex Mono', monospace;
     font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+
+  #register-box p {
+    font-size: 13px;
     color: var(--muted);
-    letter-spacing: 0.08em;
-    line-height: 2;
+    line-height: 1.6;
+    margin-bottom: 20px;
+  }
+
+  #register-box button {
+    width: 100%;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 10px;
+    cursor: pointer;
+    border: 1px solid var(--border-bright);
+    margin-bottom: 8px;
+    transition: all 0.15s;
+  }
+
+  #btn-do-register { background: var(--accent); color: #0d0d0d; border-color: var(--accent); }
+  #btn-do-register:hover { background: #d9ff6e; }
+  #btn-close-register { background: transparent; color: var(--muted); }
+  #btn-close-register:hover { background: var(--border); color: var(--text); }
+  #register-status {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.06em;
+    min-height: 16px;
+    text-align: center;
   }
 </style>
 </head>
@@ -402,26 +456,25 @@
 
 <header>
   <h1>QR Archive</h1>
-  <span id="count-label">0 codes</span>
+  <span id="count-label">loading...</span>
+  <button id="auth-btn" onclick="handleAuthBtn()">Unlock</button>
   <button id="add-btn" onclick="openModal()">+ Add code</button>
 </header>
 
 <div id="grid"></div>
 
+<!-- Add/Edit Modal -->
 <div id="overlay">
   <div id="modal">
     <h2 id="modal-heading">Add QR code</h2>
-
     <div class="field">
       <label>Title</label>
       <input id="inp-title" type="text" placeholder="e.g. New Museum ticket" />
     </div>
-
     <div class="field">
       <label>URL or note</label>
       <input id="inp-url" type="text" placeholder="e.g. https://... or ticket #101320878" />
     </div>
-
     <div class="field">
       <label>Image</label>
       <div id="drop-zone">
@@ -434,15 +487,27 @@
         <button id="preview-clear" onclick="clearImage(event)">×</button>
       </div>
     </div>
-
     <div id="modal-actions">
       <button id="btn-cancel" onclick="closeModal()">Cancel</button>
       <button id="btn-delete" style="display:none" onclick="deleteEntry()">Delete</button>
-      <button id="btn-save" onclick="saveEntry()">Save</button>
+      <button id="btn-save" onclick="saveEntry()">Add</button>
     </div>
+    <div id="status-msg"></div>
   </div>
 </div>
 
+<!-- Register panel -->
+<div id="register-panel">
+  <div id="register-box">
+    <h2>Register this device</h2>
+    <p>Set up Touch ID or Face ID on this device so you can add and edit QR codes. You only do this once per device.</p>
+    <button id="btn-do-register" onclick="doRegister()">Register with biometrics</button>
+    <button id="btn-close-register" onclick="closeRegister()">Cancel</button>
+    <div id="register-status"></div>
+  </div>
+</div>
+
+<!-- Lightbox -->
 <div id="lightbox">
   <button id="lightbox-close" onclick="closeLightbox()">Close ×</button>
   <img id="lightbox-img" src="" alt="" />
@@ -453,226 +518,426 @@
 </div>
 
 <script>
-  const STORAGE_KEY = 'qr-archive-v1';
-  let entries = [];
-  let editIdx = null;
-  let pendingImage = null;
+const SUPABASE_URL = 'https://erfxdudxgjyoyqvitaou.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_NIzNV__7lY4ZQ2Hpq7HTFA_QtUmW3zM';
+const OWNER_USER_ID = '8cc58288-dd11-4a67-8b50-156dd6f75f9c';
+const BUCKET = 'qr-images';
 
-  function load() {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (raw) entries = JSON.parse(raw);
-    } catch(e) { entries = []; }
+let isAuthenticated = false;
+let editIdx = null;
+let pendingFile = null;
+let entries = [];
+
+const headers = {
+  'apikey': SUPABASE_KEY,
+  'Authorization': `Bearer ${SUPABASE_KEY}`,
+  'Content-Type': 'application/json',
+  'Prefer': 'return=representation'
+};
+
+async function api(path, opts = {}) {
+  const res = await fetch(SUPABASE_URL + path, {
+    headers: { ...headers, ...(opts.headers || {}) },
+    ...opts
+  });
+  if (!res.ok) {
+    const err = await res.text();
+    throw new Error(err);
+  }
+  const text = await res.text();
+  return text ? JSON.parse(text) : null;
+}
+
+async function loadEntries() {
+  try {
+    const data = await api('/rest/v1/qr_entries?select=*&order=added_at.asc');
+    entries = data || [];
     render();
+  } catch(e) {
+    console.error('Load error', e);
+  }
+}
+
+function render() {
+  const grid = document.getElementById('grid');
+  grid.innerHTML = '';
+
+  if (entries.length === 0) {
+    const empty = document.createElement('div');
+    empty.className = 'empty-state';
+    empty.textContent = isAuthenticated
+      ? '// no codes yet — add your first one'
+      : '// no codes yet';
+    grid.appendChild(empty);
   }
 
-  function save() {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
-  }
+  entries.forEach((e, i) => {
+    const tile = document.createElement('div');
+    tile.className = 'tile';
 
-  function render() {
-    const grid = document.getElementById('grid');
-    grid.innerHTML = '';
-
-    if (entries.length === 0) {
-      const empty = document.createElement('div');
-      empty.className = 'empty-state';
-      empty.textContent = '// no codes yet — add your first one';
-      grid.appendChild(empty);
+    if (e.image_path) {
+      const img = document.createElement('img');
+      img.src = `${SUPABASE_URL}/storage/v1/object/public/${BUCKET}/${e.image_path}`;
+      img.alt = e.title;
+      tile.appendChild(img);
+    } else {
+      const canvas = document.createElement('canvas');
+      canvas.width = 120; canvas.height = 120;
+      drawFallbackQR(canvas, e.url || e.title || '');
+      tile.appendChild(canvas);
     }
 
-    entries.forEach((e, i) => {
-      const tile = document.createElement('div');
-      tile.className = 'tile';
-      tile.title = e.title;
+    const label = document.createElement('div');
+    label.className = 'tile-label';
+    label.textContent = e.title;
+    tile.appendChild(label);
 
-      if (e.image) {
-        const img = document.createElement('img');
-        img.src = e.image;
-        img.alt = e.title;
-        tile.appendChild(img);
-      } else {
-        const canvas = document.createElement('canvas');
-        canvas.width = 120; canvas.height = 120;
-        drawFallbackQR(canvas, e.url || e.title || '');
-        tile.appendChild(canvas);
-      }
-
-      const label = document.createElement('div');
-      label.className = 'tile-label';
-      label.textContent = e.title;
-      tile.appendChild(label);
-
-      tile.addEventListener('click', () => {
-        if (e.image) openLightbox(e);
-        else openModal(i);
-      });
-      tile.addEventListener('contextmenu', (ev) => { ev.preventDefault(); openModal(i); });
-
-      grid.appendChild(tile);
+    tile.addEventListener('click', () => {
+      if (isAuthenticated) openModal(i);
+      else if (e.image_path) openLightbox(e);
     });
 
+    grid.appendChild(tile);
+  });
+
+  if (isAuthenticated) {
     const addTile = document.createElement('div');
     addTile.className = 'tile-add';
-    addTile.title = 'Add a QR code';
     addTile.innerHTML = `<svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="#c8f060" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>`;
     addTile.addEventListener('click', () => openModal());
     grid.appendChild(addTile);
-
-    const count = entries.length;
-    document.getElementById('count-label').textContent = count === 1 ? '1 code' : `${count} codes`;
   }
 
-  function drawFallbackQR(canvas, text) {
-    const N = 21;
-    const ctx = canvas.getContext('2d');
-    ctx.fillStyle = '#161616';
-    ctx.fillRect(0, 0, 120, 120);
-    const seed = text.split('').reduce((a, c) => a + c.charCodeAt(0), 0);
-    let x = seed;
-    const rng = () => { x = (x * 1664525 + 1013904223) & 0xffffffff; return (x >>> 0) / 4294967296; };
-    const mat = Array.from({length: N}, () => new Array(N).fill(0));
-    const finder = (r, c) => { for(let dr=0;dr<7;dr++) for(let dc=0;dc<7;dc++) { const d=(dr===0||dr===6||dc===0||dc===6||(dr>=2&&dr<=4&&dc>=2&&dc<=4)); if(r+dr<N&&c+dc<N) mat[r+dr][c+dc]=d?1:-1; } };
-    finder(0,0); finder(0,14); finder(14,0);
-    for(let i=0;i<N;i++) { mat[6][i]=mat[i][6]=(i%2===0)?1:-1; }
-    for(let r=0;r<N;r++) for(let c=0;c<N;c++) { if(mat[r][c]===0) mat[r][c]=rng()>0.45?1:-1; }
-    const cell = 120/N;
-    ctx.fillStyle = '#c8f060';
-    for(let r=0;r<N;r++) for(let c=0;c<N;c++) { if(mat[r][c]===1) ctx.fillRect(Math.round(c*cell), Math.round(r*cell), Math.ceil(cell), Math.ceil(cell)); }
+  const c = entries.length;
+  document.getElementById('count-label').textContent = c === 1 ? '1 code' : `${c} codes`;
+}
+
+function setAuthenticated(val) {
+  isAuthenticated = val;
+  document.getElementById('add-btn').style.display = val ? '' : 'none';
+  document.getElementById('auth-btn').textContent = val ? 'Authenticated ✓' : 'Unlock';
+  document.getElementById('auth-btn').style.color = val ? 'var(--accent)' : '';
+  render();
+}
+
+// --- WebAuthn ---
+
+function bufferToBase64url(buffer) {
+  const bytes = new Uint8Array(buffer);
+  let str = '';
+  for (const b of bytes) str += String.fromCharCode(b);
+  return btoa(str).replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
+}
+
+function base64urlToBuffer(base64url) {
+  const base64 = base64url.replace(/-/g, '+').replace(/_/g, '/');
+  const binary = atob(base64);
+  const buffer = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i++) buffer[i] = binary.charCodeAt(i);
+  return buffer.buffer;
+}
+
+async function getCredentials() {
+  try {
+    const data = await api(`/rest/v1/passkey_credentials?user_id=eq.${OWNER_USER_ID}&select=credential_id,public_key,counter`, {
+      headers: { ...headers, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+    });
+    return data || [];
+  } catch(e) { return []; }
+}
+
+async function handleAuthBtn() {
+  if (isAuthenticated) return;
+  const creds = await getCredentials();
+  if (creds.length === 0) {
+    document.getElementById('register-panel').classList.add('open');
+  } else {
+    await doAuthenticate(creds);
   }
+}
 
-  function openModal(idx) {
-    editIdx = (idx !== undefined) ? idx : null;
-    pendingImage = null;
-    document.getElementById('inp-title').value = editIdx !== null ? entries[editIdx].title : '';
-    document.getElementById('inp-url').value = editIdx !== null ? entries[editIdx].url : '';
-    document.getElementById('modal-heading').textContent = editIdx !== null ? 'Edit entry' : 'Add QR code';
-    document.getElementById('btn-delete').style.display = editIdx !== null ? '' : 'none';
-    document.getElementById('btn-save').textContent = editIdx !== null ? 'Save' : 'Add';
-    document.getElementById('file-input').value = '';
+async function doRegister() {
+  const status = document.getElementById('register-status');
+  status.textContent = 'waiting for biometric...';
+  try {
+    const challenge = crypto.getRandomValues(new Uint8Array(32));
+    const credential = await navigator.credentials.create({
+      publicKey: {
+        challenge,
+        rp: { name: 'QR Archive', id: location.hostname },
+        user: {
+          id: new TextEncoder().encode(OWNER_USER_ID),
+          name: 'owner',
+          displayName: 'Archive Owner'
+        },
+        pubKeyCredParams: [
+          { type: 'public-key', alg: -7 },
+          { type: 'public-key', alg: -257 }
+        ],
+        authenticatorSelection: {
+          authenticatorAttachment: 'platform',
+          userVerification: 'required'
+        },
+        timeout: 60000
+      }
+    });
 
-    if (editIdx !== null && entries[editIdx].image) {
-      showPreview(entries[editIdx].image);
-      pendingImage = entries[editIdx].image;
-    } else {
-      clearImageState();
+    const credId = bufferToBase64url(credential.rawId);
+    const pubKey = bufferToBase64url(credential.response.getPublicKey
+      ? credential.response.getPublicKey()
+      : credential.response.attestationObject);
+
+    await api('/rest/v1/passkey_credentials', {
+      method: 'POST',
+      body: JSON.stringify({
+        user_id: OWNER_USER_ID,
+        credential_id: credId,
+        public_key: pubKey,
+        counter: 0
+      })
+    });
+
+    status.textContent = 'registered! you can now add codes.';
+    setTimeout(() => {
+      closeRegister();
+      setAuthenticated(true);
+    }, 1000);
+  } catch(e) {
+    status.textContent = 'error: ' + (e.message || 'registration failed');
+  }
+}
+
+async function doAuthenticate(creds) {
+  try {
+    const challenge = crypto.getRandomValues(new Uint8Array(32));
+    const allowCreds = creds.map(c => ({
+      type: 'public-key',
+      id: base64urlToBuffer(c.credential_id),
+      transports: ['internal']
+    }));
+
+    await navigator.credentials.get({
+      publicKey: {
+        challenge,
+        allowCredentials: allowCreds,
+        userVerification: 'required',
+        timeout: 60000
+      }
+    });
+
+    setAuthenticated(true);
+  } catch(e) {
+    if (e.name !== 'NotAllowedError') {
+      console.error('Auth error', e);
     }
-
-    document.getElementById('overlay').classList.add('open');
-    setTimeout(() => document.getElementById('inp-title').focus(), 60);
   }
+}
 
-  function closeModal() {
-    document.getElementById('overlay').classList.remove('open');
-    editIdx = null;
-    pendingImage = null;
-  }
+function closeRegister() {
+  document.getElementById('register-panel').classList.remove('open');
+  document.getElementById('register-status').textContent = '';
+}
 
-  function showPreview(src) {
-    document.getElementById('drop-zone').style.display = 'none';
-    document.getElementById('preview-wrap').style.display = 'block';
-    document.getElementById('preview-img').src = src;
-  }
+// --- Modal ---
 
-  function clearImageState() {
-    document.getElementById('drop-zone').style.display = '';
-    document.getElementById('preview-wrap').style.display = 'none';
-    document.getElementById('preview-img').src = '';
-    pendingImage = null;
-  }
+function openModal(idx) {
+  if (!isAuthenticated) return;
+  editIdx = (idx !== undefined) ? idx : null;
+  pendingFile = null;
+  const entry = editIdx !== null ? entries[editIdx] : null;
+  document.getElementById('inp-title').value = entry ? entry.title : '';
+  document.getElementById('inp-url').value = entry ? (entry.url || '') : '';
+  document.getElementById('modal-heading').textContent = entry ? 'Edit entry' : 'Add QR code';
+  document.getElementById('btn-delete').style.display = entry ? '' : 'none';
+  document.getElementById('btn-save').textContent = entry ? 'Save' : 'Add';
+  document.getElementById('status-msg').textContent = '';
+  document.getElementById('file-input').value = '';
 
-  function clearImage(e) {
-    e.stopPropagation();
+  if (entry && entry.image_path) {
+    const src = `${SUPABASE_URL}/storage/v1/object/public/${BUCKET}/${entry.image_path}`;
+    showPreview(src);
+  } else {
     clearImageState();
-    document.getElementById('file-input').value = '';
   }
 
-  document.getElementById('file-input').addEventListener('change', function() {
-    const file = this.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (ev) => {
-      pendingImage = ev.target.result;
-      showPreview(pendingImage);
-      if (!document.getElementById('inp-title').value) {
-        document.getElementById('inp-title').value = file.name.replace(/\.[^.]+$/, '').replace(/[_-]/g,' ');
-      }
-    };
-    reader.readAsDataURL(file);
-  });
+  document.getElementById('overlay').classList.add('open');
+  setTimeout(() => document.getElementById('inp-title').focus(), 60);
+}
 
-  const dz = document.getElementById('drop-zone');
-  dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('drag-over'); });
-  dz.addEventListener('dragleave', () => dz.classList.remove('drag-over'));
-  dz.addEventListener('drop', e => {
-    e.preventDefault(); dz.classList.remove('drag-over');
-    const file = e.dataTransfer.files[0];
-    if (!file || !file.type.startsWith('image/')) return;
-    const reader = new FileReader();
-    reader.onload = ev => {
-      pendingImage = ev.target.result;
-      showPreview(pendingImage);
-      if (!document.getElementById('inp-title').value) {
-        document.getElementById('inp-title').value = file.name.replace(/\.[^.]+$/, '').replace(/[_-]/g,' ');
-      }
-    };
-    reader.readAsDataURL(file);
-  });
+function closeModal() {
+  document.getElementById('overlay').classList.remove('open');
+  editIdx = null;
+  pendingFile = null;
+}
 
-  function saveEntry() {
-    const title = document.getElementById('inp-title').value.trim();
-    const url = document.getElementById('inp-url').value.trim();
-    if (!title) { document.getElementById('inp-title').focus(); return; }
-    const entry = { title, url, image: pendingImage || null, added: new Date().toISOString() };
-    if (editIdx !== null) entries[editIdx] = entry;
-    else entries.push(entry);
-    save();
-    closeModal();
-    render();
+function showPreview(src) {
+  document.getElementById('drop-zone').style.display = 'none';
+  document.getElementById('preview-wrap').style.display = 'block';
+  document.getElementById('preview-img').src = src;
+}
+
+function clearImageState() {
+  document.getElementById('drop-zone').style.display = '';
+  document.getElementById('preview-wrap').style.display = 'none';
+  document.getElementById('preview-img').src = '';
+  pendingFile = null;
+}
+
+function clearImage(e) {
+  e.stopPropagation();
+  clearImageState();
+  document.getElementById('file-input').value = '';
+}
+
+document.getElementById('file-input').addEventListener('change', function() {
+  const file = this.files[0];
+  if (!file) return;
+  pendingFile = file;
+  const url = URL.createObjectURL(file);
+  showPreview(url);
+  if (!document.getElementById('inp-title').value) {
+    document.getElementById('inp-title').value = file.name.replace(/\.[^.]+$/, '').replace(/[_-]/g, ' ');
   }
+});
 
-  function deleteEntry() {
-    if (editIdx === null) return;
-    entries.splice(editIdx, 1);
-    save();
-    closeModal();
-    render();
+const dz = document.getElementById('drop-zone');
+dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('drag-over'); });
+dz.addEventListener('dragleave', () => dz.classList.remove('drag-over'));
+dz.addEventListener('drop', e => {
+  e.preventDefault(); dz.classList.remove('drag-over');
+  const file = e.dataTransfer.files[0];
+  if (!file || !file.type.startsWith('image/')) return;
+  pendingFile = file;
+  showPreview(URL.createObjectURL(file));
+  if (!document.getElementById('inp-title').value) {
+    document.getElementById('inp-title').value = file.name.replace(/\.[^.]+$/, '').replace(/[_-]/g, ' ');
   }
+});
 
-  function openLightbox(e) {
-    document.getElementById('lightbox-img').src = e.image;
-    document.getElementById('lightbox-title').textContent = e.title;
-    const urlEl = document.getElementById('lightbox-url');
-    if (e.url) {
-      urlEl.textContent = e.url;
-      urlEl.href = e.url.startsWith('http') ? e.url : '#';
-      urlEl.style.display = '';
+async function saveEntry() {
+  const title = document.getElementById('inp-title').value.trim();
+  const url = document.getElementById('inp-url').value.trim();
+  if (!title) { document.getElementById('inp-title').focus(); return; }
+
+  const statusEl = document.getElementById('status-msg');
+  statusEl.textContent = 'saving...';
+  document.getElementById('btn-save').disabled = true;
+
+  try {
+    let image_path = editIdx !== null ? entries[editIdx].image_path : null;
+
+    if (pendingFile) {
+      const ext = pendingFile.name.split('.').pop();
+      const filename = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+      const uploadRes = await fetch(
+        `${SUPABASE_URL}/storage/v1/object/${BUCKET}/${filename}`,
+        {
+          method: 'POST',
+          headers: {
+            'apikey': SUPABASE_KEY,
+            'Authorization': `Bearer ${SUPABASE_KEY}`,
+            'Content-Type': pendingFile.type
+          },
+          body: pendingFile
+        }
+      );
+      if (!uploadRes.ok) throw new Error('Image upload failed');
+      image_path = filename;
+    }
+
+    if (editIdx !== null) {
+      const id = entries[editIdx].id;
+      await api(`/rest/v1/qr_entries?id=eq.${id}`, {
+        method: 'PATCH',
+        body: JSON.stringify({ title, url, image_path })
+      });
     } else {
-      urlEl.style.display = 'none';
+      await api('/rest/v1/qr_entries', {
+        method: 'POST',
+        body: JSON.stringify({ title, url, image_path })
+      });
     }
-    document.getElementById('lightbox').classList.add('open');
+
+    await loadEntries();
+    closeModal();
+  } catch(e) {
+    statusEl.textContent = 'error: ' + (e.message || 'save failed');
+    document.getElementById('btn-save').disabled = false;
   }
+}
 
-  function closeLightbox() {
-    document.getElementById('lightbox').classList.remove('open');
-  }
-
-  document.getElementById('lightbox').addEventListener('click', function(e) {
-    if (e.target === this) closeLightbox();
-  });
-
-  document.getElementById('overlay').addEventListener('click', function(e) {
-    if (e.target === this) closeModal();
-  });
-
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') { closeModal(); closeLightbox(); }
-    if (e.key === 'Enter' && document.getElementById('overlay').classList.contains('open')) {
-      if (document.activeElement.tagName !== 'BUTTON') saveEntry();
+async function deleteEntry() {
+  if (editIdx === null) return;
+  const id = entries[editIdx].id;
+  const imagePath = entries[editIdx].image_path;
+  try {
+    await api(`/rest/v1/qr_entries?id=eq.${id}`, { method: 'DELETE' });
+    if (imagePath) {
+      await fetch(`${SUPABASE_URL}/storage/v1/object/${BUCKET}/${imagePath}`, {
+        method: 'DELETE',
+        headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+      });
     }
-  });
+    await loadEntries();
+    closeModal();
+  } catch(e) {
+    document.getElementById('status-msg').textContent = 'delete failed';
+  }
+}
 
-  load();
+// --- Lightbox ---
+
+function openLightbox(e) {
+  document.getElementById('lightbox-img').src = `${SUPABASE_URL}/storage/v1/object/public/${BUCKET}/${e.image_path}`;
+  document.getElementById('lightbox-title').textContent = e.title;
+  const urlEl = document.getElementById('lightbox-url');
+  if (e.url) {
+    urlEl.textContent = e.url;
+    urlEl.href = e.url.startsWith('http') ? e.url : '#';
+    urlEl.style.display = '';
+  } else {
+    urlEl.style.display = 'none';
+  }
+  document.getElementById('lightbox').classList.add('open');
+}
+
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('open');
+}
+
+// --- Fallback QR art ---
+
+function drawFallbackQR(canvas, text) {
+  const N = 21;
+  const ctx = canvas.getContext('2d');
+  ctx.fillStyle = '#161616';
+  ctx.fillRect(0, 0, 120, 120);
+  const seed = text.split('').reduce((a, c) => a + c.charCodeAt(0), 0);
+  let x = seed;
+  const rng = () => { x = (x * 1664525 + 1013904223) & 0xffffffff; return (x >>> 0) / 4294967296; };
+  const mat = Array.from({length: N}, () => new Array(N).fill(0));
+  const finder = (r, c) => { for(let dr=0;dr<7;dr++) for(let dc=0;dc<7;dc++) { const d=(dr===0||dr===6||dc===0||dc===6||(dr>=2&&dr<=4&&dc>=2&&dc<=4)); if(r+dr<N&&c+dc<N) mat[r+dr][c+dc]=d?1:-1; } };
+  finder(0,0); finder(0,14); finder(14,0);
+  for(let i=0;i<N;i++) { mat[6][i]=mat[i][6]=(i%2===0)?1:-1; }
+  for(let r=0;r<N;r++) for(let c=0;c<N;c++) { if(mat[r][c]===0) mat[r][c]=rng()>0.45?1:-1; }
+  const cell = 120/N;
+  ctx.fillStyle = '#c8f060';
+  for(let r=0;r<N;r++) for(let c=0;c<N;c++) { if(mat[r][c]===1) ctx.fillRect(Math.round(c*cell), Math.round(r*cell), Math.ceil(cell), Math.ceil(cell)); }
+}
+
+// --- Events ---
+
+document.getElementById('lightbox').addEventListener('click', function(e) { if (e.target === this) closeLightbox(); });
+document.getElementById('overlay').addEventListener('click', function(e) { if (e.target === this) closeModal(); });
+document.getElementById('register-panel').addEventListener('click', function(e) { if (e.target === this) closeRegister(); });
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') { closeModal(); closeLightbox(); closeRegister(); }
+  if (e.key === 'Enter' && document.getElementById('overlay').classList.contains('open')) {
+    if (document.activeElement.tagName !== 'BUTTON') saveEntry();
+  }
+});
+
+loadEntries();
 </script>
 </body>
 </html>
