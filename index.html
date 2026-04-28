@@ -14,7 +14,8 @@
     --border-bright: #444;
     --text: #e8e8e0;
     --muted: #666;
-    --accent: #c8f060;
+    --accent: #f0508a;
+    --acid: #c8f060;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -105,7 +106,7 @@
     transition: background 0.15s;
   }
 
-  #add-btn:hover { background: #d9ff6e; }
+  #add-btn:hover { background: #f570a0; }
 
   #about-panel {
     display: none;
@@ -124,122 +125,123 @@
   }
 
   #grid-wrap {
-    padding: 32px 20px;
+    padding: 40px 20px;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     flex: 1;
     width: 100%;
+    gap: 16px;
   }
 
-  #grid {
-    display: grid;
-    grid-template-columns: repeat(16, 1fr);
-    gap: 2px;
-    width: min(calc(100vw - 40px), 560px);
-    aspect-ratio: 1;
-  }
-
-  .tile {
-    position: relative;
-    cursor: pointer;
-    overflow: hidden;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    transition: border-color 0.15s;
-    aspect-ratio: 1;
-  }
-
-  .tile:hover { border-color: var(--accent); z-index: 2; }
-
-  .tile img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-    filter: grayscale(20%);
-    transition: filter 0.2s;
-  }
-
-  .tile:hover img { filter: grayscale(0%); }
-
-  .tile-num {
-    position: absolute;
-    bottom: 2px;
-    right: 3px;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 6px;
-    color: var(--muted);
-    opacity: 0.35;
-    line-height: 1;
-    pointer-events: none;
-  }
-
-  .tile:hover .tile-num { opacity: 0.7; }
-
-  .tile-label {
-    position: absolute;
-    bottom: 0; left: 0; right: 0;
-    background: rgba(13,13,13,0.92);
-    padding: 3px 4px;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 7px;
-    color: var(--accent);
-    letter-spacing: 0.04em;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    opacity: 0;
-    transform: translateY(2px);
-    transition: opacity 0.15s, transform 0.15s;
-  }
-
-  .tile:hover .tile-label { opacity: 1; transform: translateY(0); }
-
-  .tile-add {
-    position: relative;
-    cursor: pointer;
-    background: transparent;
-    border: 1px dashed var(--border-bright);
+  #qr-controls {
     display: flex;
     align-items: center;
-    justify-content: center;
-    transition: border-color 0.15s, background 0.15s;
-    aspect-ratio: 1;
+    gap: 14px;
   }
 
-  .tile-add:hover { border-color: var(--accent); background: rgba(200,240,96,0.04); }
-  .tile-add svg { opacity: 0.3; transition: opacity 0.15s; width: 40%; height: 40%; }
-  .tile-add:hover svg { opacity: 1; }
-
-  @keyframes vacancy-pulse {
-    0%, 100% { opacity: 0.18; }
-    50% { opacity: 0.38; }
-  }
-
-  .tile-vacant {
-    position: relative;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    animation: vacancy-pulse 3s ease-in-out infinite;
-    aspect-ratio: 1;
-  }
-
-  .tile-vacant:nth-child(3n+1) { animation-delay: 0s; }
-  .tile-vacant:nth-child(3n+2) { animation-delay: 1s; }
-  .tile-vacant:nth-child(3n+3) { animation-delay: 2s; }
-
-  .tile-vacant .tile-num {
-    position: absolute;
-    bottom: 2px;
-    right: 3px;
+  .mode-label {
     font-family: 'IBM Plex Mono', monospace;
-    font-size: 6px;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
     color: var(--muted);
-    opacity: 0.25;
-    line-height: 1;
-    pointer-events: none;
+    transition: color 0.2s;
   }
+
+  .mode-label.active { color: var(--accent); }
+
+  #toggle-track {
+    width: 44px;
+    height: 24px;
+    background: #1a1a1a;
+    border: 1px solid #2e2e2e;
+    border-radius: 12px;
+    cursor: pointer;
+    position: relative;
+    transition: border-color 0.2s;
+  }
+
+  #toggle-track:hover { border-color: #555; }
+
+  #toggle-thumb {
+    position: absolute;
+    top: 3px; left: 3px;
+    width: 16px; height: 16px;
+    border-radius: 50%;
+    background: var(--accent);
+    transition: transform 0.25s cubic-bezier(.4,0,.2,1), background 0.2s;
+  }
+
+  #toggle-track.gallery #toggle-thumb {
+    transform: translateX(20px);
+    background: var(--acid);
+  }
+
+  #qr-outer {
+    background: #0e080c;
+    padding: 18px;
+    border-radius: 3px;
+    transition: box-shadow 0.35s ease;
+  }
+
+  #qr-outer.gallery-mode {
+    box-shadow: 0 0 0 1px var(--acid), 0 0 28px 4px rgba(200,240,96,0.18), 0 0 60px 10px rgba(200,240,96,0.08);
+  }
+
+  #qr-grid {
+    display: grid;
+    gap: 1px;
+  }
+
+  .qr-cell {
+    width: 16px;
+    height: 16px;
+    border-radius: 1px;
+    overflow: hidden;
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  .qr-cell.on  { background: var(--accent); }
+  .qr-cell.off { background: #180e14; }
+  .qr-cell.d-on  { background: var(--accent); }
+  .qr-cell.d-off { background: #180e14; }
+
+  .qr-cell.d-img { cursor: pointer; }
+  .qr-cell.d-img .qr-solid {
+    position: absolute; inset: 0;
+    background: var(--accent);
+    transition: opacity 0.35s ease;
+  }
+  .qr-cell.d-img .img-layer {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 0.35s ease;
+  }
+
+  #qr-outer.gallery-mode .qr-cell.on  { background: #2a1820; }
+  #qr-outer.gallery-mode .qr-cell.off { background: #110a0e; }
+  #qr-outer.gallery-mode .qr-cell.d-on  { background: #2a1820; }
+  #qr-outer.gallery-mode .qr-cell.d-off { background: #110a0e; }
+  #qr-outer.gallery-mode .qr-cell.d-img .qr-solid { opacity: 0; }
+  #qr-outer.gallery-mode .qr-cell.d-img .img-layer { opacity: 1; }
+  #qr-outer.gallery-mode .qr-cell.d-img:hover {
+    outline: 2px solid var(--acid);
+    z-index: 2;
+  }
+
+  #qr-counter {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.06em;
+  }
+
+  #qr-counter span { color: var(--accent); }
 
   #overlay {
     display: none;
@@ -320,7 +322,7 @@
 
   #drop-zone:hover, #drop-zone.drag-over {
     border-color: var(--accent);
-    background: rgba(200,240,96,0.04);
+    background: rgba(240,80,138,0.04);
   }
 
   #drop-zone span {
@@ -389,7 +391,7 @@
   #btn-cancel { background: transparent; color: var(--muted); }
   #btn-cancel:hover { background: var(--border); color: var(--text); }
   #btn-save { background: var(--accent); color: #0d0d0d; border-color: var(--accent); }
-  #btn-save:hover { background: #d9ff6e; }
+  #btn-save:hover { background: #f570a0; }
   #btn-delete { background: transparent; color: #e05555; border-color: #3a2020; flex: 0; padding: 9px 12px; }
   #btn-delete:hover { background: #3a2020; }
 
@@ -512,7 +514,7 @@
   }
 
   #btn-do-register { background: var(--accent); color: #0d0d0d; border-color: var(--accent); }
-  #btn-do-register:hover { background: #d9ff6e; }
+  #btn-do-register:hover { background: #f570a0; }
   #btn-close-register { background: transparent; color: var(--muted); }
   #btn-close-register:hover { background: var(--border); color: var(--text); }
 
@@ -541,7 +543,17 @@
 </div>
 
 <div id="grid-wrap">
-  <div id="grid"></div>
+  <div id="qr-controls">
+    <span class="mode-label active" id="lbl-qr">QR</span>
+    <div id="toggle-track" onclick="toggleMode()">
+      <div id="toggle-thumb"></div>
+    </div>
+    <span class="mode-label" id="lbl-gallery">Gallery</span>
+  </div>
+  <div id="qr-outer">
+    <div id="qr-grid"></div>
+  </div>
+  <div id="qr-counter"><span id="qr-filled">0</span> / 256 images</div>
 </div>
 
 <div id="overlay">
@@ -558,7 +570,7 @@
     <div class="field">
       <label>Image</label>
       <div id="drop-zone">
-        <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="#c8f060" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"/></svg>
+        <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="#f0508a" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"/></svg>
         <span>Drop image or click to browse</span>
         <input type="file" accept="image/*" id="file-input" />
       </div>
@@ -637,70 +649,170 @@ async function loadEntries() {
   }
 }
 
-function render() {
-  const grid = document.getElementById('grid');
+// ── QR MOSAIC ────────────────────────────────────────────────────────────────
+
+const QR_N = 33;
+let galleryMode = false;
+let qrCellDivs = [];  // flat array, indexed by r*QR_N+c
+let dataSlots = [];   // [{r,c,idx}] in order
+
+function makeRng(seed) {
+  let x = seed;
+  return () => { x = (x * 1664525 + 1013904223) & 0xffffffff; return (x >>> 0) / 4294967296; };
+}
+
+function buildQRMatrix(n) {
+  const m = Array.from({length:n}, () => new Array(n).fill(null));
+
+  function setFinder(r, c) {
+    for (let dr=0;dr<7;dr++) for (let dc=0;dc<7;dc++) {
+      const border = dr===0||dr===6||dc===0||dc===6;
+      const core   = dr>=2&&dr<=4&&dc>=2&&dc<=4;
+      m[r+dr][c+dc] = (border||core) ? 'on' : 'off';
+    }
+    for (let i=-1;i<=7;i++) {
+      const s = v => v>=0&&v<n;
+      if(s(r+i)&&s(c-1)) m[r+i][c-1] = m[r+i][c-1] ?? 'off';
+      if(s(r+i)&&s(c+7)) m[r+i][c+7] = m[r+i][c+7] ?? 'off';
+      if(s(r-1)&&s(c+i)) m[r-1][c+i] = m[r-1][c+i] ?? 'off';
+      if(s(r+7)&&s(c+i)) m[r+7][c+i] = m[r+7][c+i] ?? 'off';
+    }
+  }
+
+  const end = n - 7;
+  setFinder(0,0); setFinder(0,end); setFinder(end,0);
+
+  for (let i=8;i<end;i++) {
+    if (!m[6][i]) m[6][i] = (i%2===0)?'on':'off';
+    if (!m[i][6]) m[i][6] = (i%2===0)?'on':'off';
+  }
+  m[end+1][8] = 'on';
+
+  const rng = makeRng(0xc0ffee42);
+  [[8,0],[8,1],[8,2],[8,3],[8,4],[8,5],[8,7],[8,8],[7,8],[5,8],[4,8],[3,8],[2,8],[1,8],[0,8],
+   [8,end],[8,end+1],[8,end+2],[8,end+3],[8,end+4],[8,end+5],[8,end+6],
+   [end,8],[end+1,8],[end+2,8],[end+3,8],[end+4,8],[end+5,8],[end+6,8]]
+  .forEach(([r,c]) => { if (m[r]&&m[r][c]===null) m[r][c] = rng()>0.5?'on':'off'; });
+
+  for (let i=0;i<6;i++) for (let j=n-11;j<n-8;j++) if(m[i]&&!m[i][j]) m[i][j]=rng()>0.5?'on':'off';
+  for (let i=n-11;i<n-8;i++) for (let j=0;j<6;j++) if(m[i]&&!m[i][j]) m[i][j]=rng()>0.5?'on':'off';
+
+  function setAlign(r, c) {
+    for (let dr=-2;dr<=2;dr++) for (let dc=-2;dc<=2;dc++) {
+      const rr=r+dr, cc=c+dc;
+      if (rr<0||rr>=n||cc<0||cc>=n||m[rr][cc]!==null) continue;
+      const outer=Math.abs(dr)===2||Math.abs(dc)===2, inner=dr===0&&dc===0;
+      m[rr][cc]=(outer||inner)?'on':'off';
+    }
+  }
+  [[6,26],[26,6],[26,26]].forEach(([r,c])=>setAlign(r,c));
+
+  const dataRng = makeRng(0xdeadbeef);
+  for (let r=0;r<n;r++) for (let c=0;c<n;c++)
+    if (!m[r][c]) m[r][c] = dataRng()>0.5 ? 'data-on' : 'data-off';
+
+  return m;
+}
+
+const qrMatrix = buildQRMatrix(QR_N);
+
+function initQRGrid() {
+  const grid = document.getElementById('qr-grid');
+  grid.style.gridTemplateColumns = `repeat(${QR_N}, 16px)`;
   grid.innerHTML = '';
+  qrCellDivs = [];
+  dataSlots = [];
+
+  for (let r=0;r<QR_N;r++) for (let c=0;c<QR_N;c++) {
+    const div = document.createElement('div');
+    div.className = 'qr-cell';
+    const t = qrMatrix[r][c];
+    if (t==='on') div.classList.add('on');
+    else if (t==='off') div.classList.add('off');
+    else if (t==='data-on') div.classList.add('d-on');
+    else div.classList.add('d-off');
+    grid.appendChild(div);
+    qrCellDivs.push(div);
+    if (t==='data-on'||t==='data-off') dataSlots.push({r,c,flatIdx:r*QR_N+c});
+  }
+}
+
+function render() {
+  const total = 256;
+  const slots = dataSlots.slice(0, total);
+
+  // reset all data cells to their seeded state first
+  slots.forEach(({flatIdx}, i) => {
+    const div = qrCellDivs[flatIdx];
+    // remove img classes, restore seeded color
+    if (div.classList.contains('d-img')) {
+      div.className = 'qr-cell ' + (qrMatrix[Math.floor(flatIdx/QR_N)][flatIdx%QR_N] === 'data-on' ? 'd-on' : 'd-off');
+      div.innerHTML = '';
+    }
+  });
 
   entries.forEach((e, i) => {
-    const tile = document.createElement('div');
-    tile.className = 'tile';
+    if (i >= slots.length) return;
+    const {flatIdx} = slots[i];
+    const div = qrCellDivs[flatIdx];
+    div.className = 'qr-cell d-img';
+    div.innerHTML = '';
+
+    const solid = document.createElement('div');
+    solid.className = 'qr-solid';
+    div.appendChild(solid);
 
     if (e.image_path) {
       const img = document.createElement('img');
+      img.className = 'img-layer';
       img.src = `${SUPABASE_URL}/storage/v1/object/public/${BUCKET}/${e.image_path}`;
       img.alt = e.title;
-      tile.appendChild(img);
+      div.appendChild(img);
     } else {
       const canvas = document.createElement('canvas');
-      canvas.width = 80; canvas.height = 80;
-      canvas.style.width = '100%';
-      canvas.style.height = '100%';
+      canvas.className = 'img-layer';
+      canvas.width = 40; canvas.height = 40;
       drawFallbackQR(canvas, e.url || e.title || '');
-      tile.appendChild(canvas);
+      div.appendChild(canvas);
     }
 
-    const label = document.createElement('div');
-    label.className = 'tile-label';
-    label.textContent = e.title;
-    tile.appendChild(label);
-
-    const num = document.createElement('div');
-    num.className = 'tile-num';
-    num.textContent = i;
-    tile.appendChild(num);
-
-    tile.addEventListener('click', () => {
-      if (isAuthenticated) openModal(i);
-      else if (e.image_path) openLightbox(e);
-    });
-
-    grid.appendChild(tile);
+    div.onclick = () => {
+      if (galleryMode) {
+        if (isAuthenticated) openModal(i);
+        else if (e.image_path) openLightbox(e);
+      }
+    };
   });
 
-  if (isAuthenticated) {
-    const addTile = document.createElement('div');
-    addTile.className = 'tile-add';
-    addTile.innerHTML = `<svg fill="none" viewBox="0 0 24 24" stroke="#c8f060" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>`;
-    addTile.addEventListener('click', () => openModal());
-    grid.appendChild(addTile);
+  // add button: find first empty slot after entries
+  const addSlotIdx = entries.length;
+  if (isAuthenticated && addSlotIdx < slots.length) {
+    const {flatIdx} = slots[addSlotIdx];
+    const div = qrCellDivs[flatIdx];
+    div.className = 'qr-cell d-img';
+    div.innerHTML = '';
+    const solid = document.createElement('div');
+    solid.className = 'qr-solid';
+    solid.style.background = 'transparent';
+    solid.style.border = '1px dashed #f0508a';
+    div.appendChild(solid);
+    div.onclick = () => openModal();
   }
 
-  const filled = entries.length;
-  const addSlot = isAuthenticated ? 1 : 0;
-  const remaining = 256 - filled - addSlot;
-  for (let i = 0; i < remaining; i++) {
-    const vacant = document.createElement('div');
-    vacant.className = 'tile-vacant';
-    const num = document.createElement('div');
-    num.className = 'tile-num';
-    num.textContent = filled + addSlot + i;
-    vacant.appendChild(num);
-    grid.appendChild(vacant);
-  }
-
-  const c = entries.length;
-  document.getElementById('count-label').textContent = `${c} / 256`;
+  document.getElementById('qr-filled').textContent = entries.length;
+  document.getElementById('count-label').textContent = `${entries.length} / 256`;
 }
+
+function toggleMode() {
+  galleryMode = !galleryMode;
+  document.getElementById('toggle-track').classList.toggle('gallery', galleryMode);
+  document.getElementById('qr-outer').classList.toggle('gallery-mode', galleryMode);
+  document.getElementById('lbl-qr').classList.toggle('active', !galleryMode);
+  document.getElementById('lbl-gallery').classList.toggle('active', galleryMode);
+}
+
+// initialise grid immediately, data loads after
+initQRGrid();
 
 function setAuthenticated(val) {
   isAuthenticated = val;
@@ -980,7 +1092,7 @@ function drawFallbackQR(canvas, text) {
   for(let i=0;i<N;i++) { mat[6][i]=mat[i][6]=(i%2===0)?1:-1; }
   for(let r=0;r<N;r++) for(let c=0;c<N;c++) { if(mat[r][c]===0) mat[r][c]=rng()>0.45?1:-1; }
   const cell = canvas.width/N;
-  ctx.fillStyle = '#c8f060';
+  ctx.fillStyle = '#f0508a';
   for(let r=0;r<N;r++) for(let c=0;c<N;c++) { if(mat[r][c]===1) ctx.fillRect(Math.round(c*cell), Math.round(r*cell), Math.ceil(cell), Math.ceil(cell)); }
 }
 
