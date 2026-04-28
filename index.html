@@ -15,8 +15,6 @@
     --text: #e8e8e0;
     --muted: #666;
     --accent: #c8f060;
-    --tile: 120px;
-    --gap: 3px;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -26,23 +24,27 @@
     color: var(--text);
     font-family: 'IBM Plex Sans', sans-serif;
     min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
   header {
+    width: 100%;
     border-bottom: 1px solid var(--border);
-    padding: 20px 28px;
+    padding: 14px 20px;
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 12px;
+    background: var(--bg);
     position: sticky;
     top: 0;
-    background: var(--bg);
     z-index: 10;
   }
 
   header h1 {
     font-family: 'IBM Plex Mono', monospace;
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 700;
     letter-spacing: 0.12em;
     text-transform: uppercase;
@@ -51,7 +53,7 @@
 
   #count-label {
     font-family: 'IBM Plex Mono', monospace;
-    font-size: 11px;
+    font-size: 10px;
     color: var(--muted);
     letter-spacing: 0.06em;
   }
@@ -60,7 +62,7 @@
     background: transparent;
     border: none;
     font-family: 'IBM Plex Mono', monospace;
-    font-size: 11px;
+    font-size: 10px;
     letter-spacing: 0.1em;
     text-transform: uppercase;
     color: var(--muted);
@@ -77,11 +79,11 @@
     color: var(--muted);
     border: 1px solid var(--border-bright);
     font-family: 'IBM Plex Mono', monospace;
-    font-size: 11px;
+    font-size: 10px;
     font-weight: 700;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    padding: 8px 16px;
+    padding: 6px 12px;
     cursor: pointer;
     transition: all 0.15s;
   }
@@ -94,11 +96,11 @@
     color: #0d0d0d;
     border: none;
     font-family: 'IBM Plex Mono', monospace;
-    font-size: 11px;
+    font-size: 10px;
     font-weight: 700;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    padding: 8px 16px;
+    padding: 6px 12px;
     cursor: pointer;
     transition: background 0.15s;
   }
@@ -107,35 +109,45 @@
 
   #about-panel {
     display: none;
+    width: 100%;
     border-bottom: 1px solid var(--border);
-    padding: 20px 28px;
+    padding: 16px 20px;
     background: var(--bg);
   }
 
   #about-panel p {
     font-family: 'IBM Plex Mono', monospace;
-    font-size: 12px;
+    font-size: 11px;
     line-height: 1.8;
     color: var(--muted);
-    max-width: 560px;
+    max-width: 480px;
+  }
+
+  #grid-wrap {
+    padding: 32px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    width: 100%;
   }
 
   #grid {
     display: grid;
-    grid-template-columns: repeat(16, var(--tile));
-    gap: var(--gap);
-    padding: var(--gap);
+    grid-template-columns: repeat(16, 1fr);
+    gap: 2px;
+    width: min(calc(100vw - 40px), 560px);
+    aspect-ratio: 1;
   }
 
   .tile {
-    width: var(--tile);
-    height: var(--tile);
     position: relative;
     cursor: pointer;
     overflow: hidden;
     background: var(--surface);
     border: 1px solid var(--border);
     transition: border-color 0.15s;
+    aspect-ratio: 1;
   }
 
   .tile:hover { border-color: var(--accent); z-index: 2; }
@@ -151,13 +163,27 @@
 
   .tile:hover img { filter: grayscale(0%); }
 
+  .tile-num {
+    position: absolute;
+    bottom: 2px;
+    right: 3px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 6px;
+    color: var(--muted);
+    opacity: 0.35;
+    line-height: 1;
+    pointer-events: none;
+  }
+
+  .tile:hover .tile-num { opacity: 0.7; }
+
   .tile-label {
     position: absolute;
     bottom: 0; left: 0; right: 0;
     background: rgba(13,13,13,0.92);
-    padding: 5px 6px;
+    padding: 3px 4px;
     font-family: 'IBM Plex Mono', monospace;
-    font-size: 9px;
+    font-size: 7px;
     color: var(--accent);
     letter-spacing: 0.04em;
     white-space: nowrap;
@@ -171,19 +197,19 @@
   .tile:hover .tile-label { opacity: 1; transform: translateY(0); }
 
   .tile-add {
-    width: var(--tile);
-    height: var(--tile);
+    position: relative;
+    cursor: pointer;
     background: transparent;
     border: 1px dashed var(--border-bright);
-    cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     transition: border-color 0.15s, background 0.15s;
+    aspect-ratio: 1;
   }
 
   .tile-add:hover { border-color: var(--accent); background: rgba(200,240,96,0.04); }
-  .tile-add svg { opacity: 0.3; transition: opacity 0.15s; }
+  .tile-add svg { opacity: 0.3; transition: opacity 0.15s; width: 40%; height: 40%; }
   .tile-add:hover svg { opacity: 1; }
 
   @keyframes vacancy-pulse {
@@ -192,16 +218,28 @@
   }
 
   .tile-vacant {
-    width: var(--tile);
-    height: var(--tile);
+    position: relative;
     background: var(--surface);
     border: 1px solid var(--border);
     animation: vacancy-pulse 3s ease-in-out infinite;
+    aspect-ratio: 1;
   }
 
   .tile-vacant:nth-child(3n+1) { animation-delay: 0s; }
   .tile-vacant:nth-child(3n+2) { animation-delay: 1s; }
   .tile-vacant:nth-child(3n+3) { animation-delay: 2s; }
+
+  .tile-vacant .tile-num {
+    position: absolute;
+    bottom: 2px;
+    right: 3px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 6px;
+    color: var(--muted);
+    opacity: 0.25;
+    line-height: 1;
+    pointer-events: none;
+  }
 
   #overlay {
     display: none;
@@ -217,9 +255,9 @@
   #modal {
     background: var(--surface);
     border: 1px solid var(--border-bright);
-    width: 420px;
+    width: 400px;
     max-width: 95vw;
-    padding: 28px;
+    padding: 24px;
     animation: slideUp 0.2s ease;
   }
 
@@ -235,10 +273,10 @@
     letter-spacing: 0.12em;
     text-transform: uppercase;
     color: var(--accent);
-    margin-bottom: 24px;
+    margin-bottom: 20px;
   }
 
-  .field { margin-bottom: 16px; }
+  .field { margin-bottom: 14px; }
 
   .field label {
     display: block;
@@ -247,7 +285,7 @@
     letter-spacing: 0.1em;
     text-transform: uppercase;
     color: var(--muted);
-    margin-bottom: 6px;
+    margin-bottom: 5px;
   }
 
   .field input[type=text] {
@@ -256,8 +294,8 @@
     border: 1px solid var(--border-bright);
     color: var(--text);
     font-family: 'IBM Plex Sans', sans-serif;
-    font-size: 14px;
-    padding: 9px 12px;
+    font-size: 13px;
+    padding: 8px 10px;
     outline: none;
     transition: border-color 0.15s;
   }
@@ -268,7 +306,7 @@
   #drop-zone {
     border: 1px dashed var(--border-bright);
     background: var(--bg);
-    height: 120px;
+    height: 100px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -305,7 +343,7 @@
   #preview-wrap {
     display: none;
     position: relative;
-    height: 120px;
+    height: 100px;
     background: var(--bg);
     border: 1px solid var(--border-bright);
     overflow: hidden;
@@ -320,7 +358,7 @@
     border: 1px solid var(--border-bright);
     color: var(--muted);
     font-size: 14px;
-    width: 24px; height: 24px;
+    width: 22px; height: 22px;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -332,17 +370,17 @@
   #modal-actions {
     display: flex;
     gap: 8px;
-    margin-top: 24px;
+    margin-top: 20px;
   }
 
   #modal-actions button {
     flex: 1;
     font-family: 'IBM Plex Mono', monospace;
-    font-size: 11px;
+    font-size: 10px;
     font-weight: 700;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    padding: 10px;
+    padding: 9px;
     cursor: pointer;
     border: 1px solid var(--border-bright);
     transition: background 0.15s, color 0.15s;
@@ -352,16 +390,16 @@
   #btn-cancel:hover { background: var(--border); color: var(--text); }
   #btn-save { background: var(--accent); color: #0d0d0d; border-color: var(--accent); }
   #btn-save:hover { background: #d9ff6e; }
-  #btn-delete { background: transparent; color: #e05555; border-color: #3a2020; flex: 0; padding: 10px 14px; }
+  #btn-delete { background: transparent; color: #e05555; border-color: #3a2020; flex: 0; padding: 9px 12px; }
   #btn-delete:hover { background: #3a2020; }
 
   #status-msg {
     font-family: 'IBM Plex Mono', monospace;
     font-size: 10px;
     color: var(--muted);
-    margin-top: 12px;
+    margin-top: 10px;
     letter-spacing: 0.06em;
-    min-height: 16px;
+    min-height: 14px;
     text-align: center;
   }
 
@@ -436,9 +474,9 @@
   #register-box {
     background: var(--surface);
     border: 1px solid var(--border-bright);
-    width: 360px;
+    width: 340px;
     max-width: 95vw;
-    padding: 28px;
+    padding: 24px;
     animation: slideUp 0.2s ease;
   }
 
@@ -449,20 +487,20 @@
     letter-spacing: 0.12em;
     text-transform: uppercase;
     color: var(--accent);
-    margin-bottom: 12px;
+    margin-bottom: 10px;
   }
 
   #register-box p {
     font-size: 13px;
     color: var(--muted);
     line-height: 1.6;
-    margin-bottom: 20px;
+    margin-bottom: 18px;
   }
 
   #register-box button {
     width: 100%;
     font-family: 'IBM Plex Mono', monospace;
-    font-size: 11px;
+    font-size: 10px;
     font-weight: 700;
     letter-spacing: 0.1em;
     text-transform: uppercase;
@@ -477,12 +515,13 @@
   #btn-do-register:hover { background: #d9ff6e; }
   #btn-close-register { background: transparent; color: var(--muted); }
   #btn-close-register:hover { background: var(--border); color: var(--text); }
+
   #register-status {
     font-family: 'IBM Plex Mono', monospace;
     font-size: 10px;
     color: var(--muted);
     letter-spacing: 0.06em;
-    min-height: 16px;
+    min-height: 14px;
     text-align: center;
   }
 </style>
@@ -490,18 +529,20 @@
 <body>
 
 <header>
-  <h1>QR Archive</h1>
+  <h1>YCOT</h1>
   <span id="count-label">loading...</span>
   <button id="about-btn" onclick="toggleAbout()">About ↓</button>
   <button id="auth-btn" onclick="handleAuthBtn()">Unlock</button>
-  <button id="add-btn" onclick="openModal()">+ Add code</button>
+  <button id="add-btn" onclick="openModal()">+ Add</button>
 </header>
 
 <div id="about-panel">
   <p>testing</p>
 </div>
 
-<div id="grid"></div>
+<div id="grid-wrap">
+  <div id="grid"></div>
+</div>
 
 <div id="overlay">
   <div id="modal">
@@ -592,6 +633,7 @@ async function loadEntries() {
     render();
   } catch(e) {
     console.error('Load error', e);
+    document.getElementById('count-label').textContent = 'error';
   }
 }
 
@@ -610,7 +652,9 @@ function render() {
       tile.appendChild(img);
     } else {
       const canvas = document.createElement('canvas');
-      canvas.width = 120; canvas.height = 120;
+      canvas.width = 80; canvas.height = 80;
+      canvas.style.width = '100%';
+      canvas.style.height = '100%';
       drawFallbackQR(canvas, e.url || e.title || '');
       tile.appendChild(canvas);
     }
@@ -619,6 +663,11 @@ function render() {
     label.className = 'tile-label';
     label.textContent = e.title;
     tile.appendChild(label);
+
+    const num = document.createElement('div');
+    num.className = 'tile-num';
+    num.textContent = i;
+    tile.appendChild(num);
 
     tile.addEventListener('click', () => {
       if (isAuthenticated) openModal(i);
@@ -631,21 +680,26 @@ function render() {
   if (isAuthenticated) {
     const addTile = document.createElement('div');
     addTile.className = 'tile-add';
-    addTile.innerHTML = `<svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="#c8f060" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>`;
+    addTile.innerHTML = `<svg fill="none" viewBox="0 0 24 24" stroke="#c8f060" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>`;
     addTile.addEventListener('click', () => openModal());
     grid.appendChild(addTile);
   }
 
   const filled = entries.length;
-  const remaining = 256 - filled - (isAuthenticated ? 1 : 0);
+  const addSlot = isAuthenticated ? 1 : 0;
+  const remaining = 256 - filled - addSlot;
   for (let i = 0; i < remaining; i++) {
     const vacant = document.createElement('div');
     vacant.className = 'tile-vacant';
+    const num = document.createElement('div');
+    num.className = 'tile-num';
+    num.textContent = filled + addSlot + i;
+    vacant.appendChild(num);
     grid.appendChild(vacant);
   }
 
   const c = entries.length;
-  document.getElementById('count-label').textContent = c === 1 ? '1 / 256' : `${c} / 256`;
+  document.getElementById('count-label').textContent = `${c} / 256`;
 }
 
 function setAuthenticated(val) {
@@ -681,9 +735,7 @@ function base64urlToBuffer(base64url) {
 
 async function getCredentials() {
   try {
-    const data = await api(`/rest/v1/passkey_credentials?user_id=eq.${OWNER_USER_ID}&select=credential_id,public_key,counter`, {
-      headers: { ...headers, 'Authorization': `Bearer ${SUPABASE_KEY}` }
-    });
+    const data = await api(`/rest/v1/passkey_credentials?user_id=eq.${OWNER_USER_ID}&select=credential_id,public_key,counter`);
     return data || [];
   } catch(e) { return []; }
 }
@@ -739,11 +791,8 @@ async function doRegister() {
       })
     });
 
-    status.textContent = 'registered! you can now add codes.';
-    setTimeout(() => {
-      closeRegister();
-      setAuthenticated(true);
-    }, 1000);
+    status.textContent = 'registered!';
+    setTimeout(() => { closeRegister(); setAuthenticated(true); }, 1000);
   } catch(e) {
     status.textContent = 'error: ' + (e.message || 'registration failed');
   }
@@ -757,21 +806,12 @@ async function doAuthenticate(creds) {
       id: base64urlToBuffer(c.credential_id),
       transports: ['internal']
     }));
-
     await navigator.credentials.get({
-      publicKey: {
-        challenge,
-        allowCredentials: allowCreds,
-        userVerification: 'required',
-        timeout: 60000
-      }
+      publicKey: { challenge, allowCredentials: allowCreds, userVerification: 'required', timeout: 60000 }
     });
-
     setAuthenticated(true);
   } catch(e) {
-    if (e.name !== 'NotAllowedError') {
-      console.error('Auth error', e);
-    }
+    if (e.name !== 'NotAllowedError') console.error('Auth error', e);
   }
 }
 
@@ -792,14 +832,11 @@ function openModal(idx) {
   document.getElementById('btn-save').textContent = entry ? 'Save' : 'Add';
   document.getElementById('status-msg').textContent = '';
   document.getElementById('file-input').value = '';
-
   if (entry && entry.image_path) {
-    const src = `${SUPABASE_URL}/storage/v1/object/public/${BUCKET}/${entry.image_path}`;
-    showPreview(src);
+    showPreview(`${SUPABASE_URL}/storage/v1/object/public/${BUCKET}/${entry.image_path}`);
   } else {
     clearImageState();
   }
-
   document.getElementById('overlay').classList.add('open');
   setTimeout(() => document.getElementById('inp-title').focus(), 60);
 }
@@ -833,8 +870,7 @@ document.getElementById('file-input').addEventListener('change', function() {
   const file = this.files[0];
   if (!file) return;
   pendingFile = file;
-  const url = URL.createObjectURL(file);
-  showPreview(url);
+  showPreview(URL.createObjectURL(file));
   if (!document.getElementById('inp-title').value) {
     document.getElementById('inp-title').value = file.name.replace(/\.[^.]+$/, '').replace(/[_-]/g, ' ');
   }
@@ -858,36 +894,24 @@ async function saveEntry() {
   const title = document.getElementById('inp-title').value.trim();
   const url = document.getElementById('inp-url').value.trim();
   if (!title) { document.getElementById('inp-title').focus(); return; }
-
   const statusEl = document.getElementById('status-msg');
   statusEl.textContent = 'saving...';
   document.getElementById('btn-save').disabled = true;
-
   try {
     let image_path = editIdx !== null ? entries[editIdx].image_path : null;
-
     if (pendingFile) {
       const ext = pendingFile.name.split('.').pop();
       const filename = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
-      const uploadRes = await fetch(
-        `${SUPABASE_URL}/storage/v1/object/${BUCKET}/${filename}`,
-        {
-          method: 'POST',
-          headers: {
-            'apikey': SUPABASE_KEY,
-            'Authorization': `Bearer ${SUPABASE_KEY}`,
-            'Content-Type': pendingFile.type
-          },
-          body: pendingFile
-        }
-      );
+      const uploadRes = await fetch(`${SUPABASE_URL}/storage/v1/object/${BUCKET}/${filename}`, {
+        method: 'POST',
+        headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}`, 'Content-Type': pendingFile.type },
+        body: pendingFile
+      });
       if (!uploadRes.ok) throw new Error('Image upload failed');
       image_path = filename;
     }
-
     if (editIdx !== null) {
-      const id = entries[editIdx].id;
-      await api(`/rest/v1/qr_entries?id=eq.${id}`, {
+      await api(`/rest/v1/qr_entries?id=eq.${entries[editIdx].id}`, {
         method: 'PATCH',
         body: JSON.stringify({ title, url, image_path })
       });
@@ -897,7 +921,6 @@ async function saveEntry() {
         body: JSON.stringify({ title, url, image_path })
       });
     }
-
     await loadEntries();
     closeModal();
   } catch(e) {
@@ -947,7 +970,7 @@ function drawFallbackQR(canvas, text) {
   const N = 21;
   const ctx = canvas.getContext('2d');
   ctx.fillStyle = '#161616';
-  ctx.fillRect(0, 0, 120, 120);
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
   const seed = text.split('').reduce((a, c) => a + c.charCodeAt(0), 0);
   let x = seed;
   const rng = () => { x = (x * 1664525 + 1013904223) & 0xffffffff; return (x >>> 0) / 4294967296; };
@@ -956,7 +979,7 @@ function drawFallbackQR(canvas, text) {
   finder(0,0); finder(0,14); finder(14,0);
   for(let i=0;i<N;i++) { mat[6][i]=mat[i][6]=(i%2===0)?1:-1; }
   for(let r=0;r<N;r++) for(let c=0;c<N;c++) { if(mat[r][c]===0) mat[r][c]=rng()>0.45?1:-1; }
-  const cell = 120/N;
+  const cell = canvas.width/N;
   ctx.fillStyle = '#c8f060';
   for(let r=0;r<N;r++) for(let c=0;c<N;c++) { if(mat[r][c]===1) ctx.fillRect(Math.round(c*cell), Math.round(r*cell), Math.ceil(cell), Math.ceil(cell)); }
 }
